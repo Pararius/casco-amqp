@@ -80,7 +80,6 @@ class HumusAmqpFactory
         $queue->setName($name);
         $queue->setFlags($flags);
         $queue->declareQueue();
-//        $queue->bind($exchange, $routingKey);
 
         return $queue;
     }
