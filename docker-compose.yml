@@ -1,0 +1,27 @@
+version: '3.5'
+
+services:
+  rabbitmq:
+    build: ../../docker/rabbitmq
+    environment:
+      RABBITMQ_DEFAULT_USER: test
+      RABBITMQ_DEFAULT_PASS: 1234
+
+  php-cli:
+    build:
+      context: ../../docker/php
+      dockerfile: ./cli/Dockerfile
+    environment:
+      - AMQP_HOST=rabbitmq
+      - AMQP_USER=test
+      - AMQP_PASS=1234
+    volumes:
+      - ./:/app
+
+  composer:
+    build:
+      context: ../../docker/php
+      dockerfile: ./composer/Dockerfile
+    volumes:
+      - ~/.composer/cache:/composer/cache
+      - ./:/app
