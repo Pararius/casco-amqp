@@ -5,14 +5,14 @@ help: ## Show this help message.
 	@egrep '^(.+)\:(.+)?\ ##\ (.+)' ${MAKEFILE_LIST} | column -t -c 2 -s ':#'
 .PHONY: help
 
-pre: ## Ensures prerequisites
+up: ## Ensures prerequisites
 	docker-compose up -d rabbitmq
 
 install: ## Installs dependencies
 	docker-compose run --rm composer composer install --optimize-autoloader --no-interaction
 .PHONY: install
 
-test: pre ## Runs test suite
+test: up ## Runs test suite
 	docker-compose run --rm php-cli ./vendor/bin/phpunit
 	docker-compose down
 .PHONY: test
