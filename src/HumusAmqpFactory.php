@@ -46,6 +46,7 @@ class HumusAmqpFactory
      * @param string  $name
      * @param string  $type
      * @param int     $flags
+     * @param array   $args
      *
      * @return Exchange
      */
@@ -53,15 +54,42 @@ class HumusAmqpFactory
         Channel $channel,
         string $name,
         string $type = 'topic',
-        int $flags = Constants::AMQP_DURABLE
+        int $flags = Constants::AMQP_DURABLE,
+        array $args = []
     ): Exchange {
         $exchange = $channel->newExchange();
         $exchange->setName($name);
         $exchange->setType($type);
         $exchange->setFlags($flags);
+        $exchange->setArguments($args);
         $exchange->declareExchange();
 
         return $exchange;
+    }
+
+    /**
+     * @param Channel $channel
+     * @param string  $name
+     * @param string  $type
+     * @param int     $flags
+     *
+     * @return Exchange
+     */
+    public static function createDelayedExchange(
+        Channel $channel,
+        string $name,
+        string $type = 'topic',
+        int $flags = Constants::AMQP_DURABLE
+    ): Exchange {
+        return static::createExchange(
+            $channel,
+            $name,
+            'x-delayed-message',
+            $flags,
+            [
+                'x-delayed-type' => $type,
+            ]
+        );
     }
 
     /**
