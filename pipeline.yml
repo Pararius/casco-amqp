@@ -1,0 +1,100 @@
+---
+resources:
+  - name: src-amqp-comp
+    .: ((inject meta.resources.git))
+    source:
+      paths:
+        - components/amqp
+
+  - name: img-composer
+    .: ((inject meta.resources.registry))
+    source:
+      repository: ((concat meta.registry.repo "/casco/composer"))
+
+jobs:
+  - name: cs-check-component-amqp
+    serial: true
+    plan:
+      - aggregate:
+        - get: src
+          resource: src-amqp-comp
+          trigger: true
+        - get: composer
+          resource: img-composer
+          passed: ['build-composer']
+          params:
+            save: true
+      - task: run cs check
+        image: composer
+        config:
+          platform: linux
+          inputs:
+            - name: src
+          run:
+            dir: src/components/amqp
+            path: sh
+            args:
+            - -exc
+            - |
+              # install dependencies
+              composer install --optimize-autoloader --no-interaction
+
+              # run tests
+              ./vendor/bin/php-cs-fixer fix -vvv --diff --dry-run
+
+  - name: test-component-amqp
+    serial: true
+    plan:
+      - aggregate:
+        - get: src
+          resource: src-amqp-comp
+          passed: ['cs-check-component-amqp']
+          trigger: true
+        - get: composer
+          resource: img-composer
+          passed: ['cs-check-component-amqp']
+          params:
+            save: true
+      - task: run tests
+        privileged: true
+        config:
+          platform: linux
+          image_resource:
+            type: docker-image
+            source:
+              repository: karlkfi/concourse-dcind
+          inputs:
+          - name: src
+          - name: composer
+          run:
+            path: entrypoint.sh
+            args:
+            - bash
+            - -ceux
+            - |
+              # load image
+              docker load -i composer/image
+              docker tag "$(cat composer/image-id)" "$(cat composer/repository):latest"
+
+              # pre-start rabbbitmq image
+              docker-compose -f src/components/amqp/docker-compose.yml \
+                up -d rabbitmq
+
+              # install dependencies
+              docker-compose -f src/components/amqp/docker-compose.yml \
+                run --rm composer composer install --optimize-autoloader --no-interaction
+
+              # run tests
+              docker-compose -f src/components/amqp/docker-compose.yml \
+                run \
+                  -e AMQP_HOST=rabbitmq \
+                  -e AMQP_USER=test \
+                  -e AMQP_PASS=1234 \
+                  --rm composer ./vendor/bin/phpunit
+                  
+              # clean-up docker-compose containers
+              docker-compose -f src/components/amqp/docker-compose.yml \
+                down
+
+              # clean-up volumes
+              docker volume rm -f $(docker volume ls -q)
