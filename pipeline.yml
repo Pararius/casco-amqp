@@ -28,7 +28,6 @@ jobs:
           trigger: true
         - get: composer
           resource: img-composer
-          passed: ['build-composer']
           params:
             save: true
       - task: run cs check
