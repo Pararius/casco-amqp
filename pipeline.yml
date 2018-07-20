@@ -1,4 +1,11 @@
 ---
+groups:
+  - name: components
+    jobs:
+      - ((append))
+      - 'cs-check-component-amqp'
+      - 'test-component-amqp'
+
 resources:
   - name: src-amqp-comp
     .: ((inject meta.resources.git))
