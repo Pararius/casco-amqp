@@ -5,38 +5,43 @@ declare(strict_types=1);
 namespace Amqp\CacheWarmer;
 
 use Humus\Amqp\Exchange;
-use Symfony\Component\HttpKernel\CacheWarmer\CacheWarmerInterface;
+use Symfony\Component\Console\Command\Command;
+use Symfony\Component\Console\Input\InputInterface;
+use Symfony\Component\Console\Output\OutputInterface;
 
-class DeclareAmqpExchanges implements CacheWarmerInterface
+class DeclareAmqpExchanges extends Command
 {
+    /**
+     * @var string
+     */
+    protected static $defaultName = 'amqp:declare:exchange';
+
     /**
      * @var Exchange[]
      */
     private $exchanges;
 
     /**
-     * @param Exchange[] $exchanges
+     * @param iterable $exchanges
      */
-    public function __construct(Exchange ...$exchanges)
+    public function __construct(?iterable $exchanges)
     {
         $this->exchanges = $exchanges;
+        parent::__construct();
     }
 
     /**
      * @inheritdoc
      */
-    public function isOptional(): bool
+    public function execute(InputInterface $input, OutputInterface $output): void
     {
-        return false;
-    }
+        $output->writeln('Exchanges started.');
 
-    /**
-     * @inheritdoc
-     */
-    public function warmUp($cacheDir): void
-    {
         foreach ($this->exchanges as $exchange) {
+            $output->writeln('Create exchange ' . $exchange->getName());
             $exchange->declareExchange();
         }
+
+        $output->writeln('Exchanges finished.');
     }
 }

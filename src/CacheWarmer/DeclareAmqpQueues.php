@@ -5,38 +5,43 @@ declare(strict_types=1);
 namespace Amqp\CacheWarmer;
 
 use Humus\Amqp\Queue;
-use Symfony\Component\HttpKernel\CacheWarmer\CacheWarmerInterface;
+use Symfony\Component\Console\Command\Command;
+use Symfony\Component\Console\Input\InputInterface;
+use Symfony\Component\Console\Output\OutputInterface;
 
-class DeclareAmqpQueues implements CacheWarmerInterface
+class DeclareAmqpQueues extends Command
 {
+    /**
+     * @var string
+     */
+    protected static $defaultName = 'amqp:declare:queue';
+
     /**
      * @var Queue[]
      */
     private $queues;
 
     /**
-     * @param Queue[] $queues
+     * @param iterable $queues
      */
-    public function __construct(Queue ...$queues)
+    public function __construct(?iterable $queues)
     {
         $this->queues = $queues;
+        parent::__construct();
     }
 
     /**
      * @inheritdoc
      */
-    public function isOptional(): bool
+    public function execute(InputInterface $input, OutputInterface $output): void
     {
-        return false;
-    }
+        $output->writeln('Queues started.');
 
-    /**
-     * @inheritdoc
-     */
-    public function warmUp($cacheDir): void
-    {
         foreach ($this->queues as $queue) {
+            $output->writeln('Create queue ' . $queue->getName());
             $queue->declareQueue();
         }
+
+        $output->writeln('Queues finished.');
     }
 }
