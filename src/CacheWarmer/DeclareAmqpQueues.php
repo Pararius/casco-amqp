@@ -14,7 +14,7 @@ class DeclareAmqpQueues extends Command
     /**
      * @var string
      */
-    protected static $defaultName = 'amqp:declare:queue';
+    protected static $defaultName = 'amqp:declare:queues';
 
     /**
      * @var Queue[]
@@ -22,9 +22,9 @@ class DeclareAmqpQueues extends Command
     private $queues;
 
     /**
-     * @param iterable $queues
+     * @param Queue ...$queues
      */
-    public function __construct(?iterable $queues)
+    public function __construct(Queue ...$queues)
     {
         $this->queues = $queues;
         parent::__construct();
@@ -35,8 +35,6 @@ class DeclareAmqpQueues extends Command
      */
     public function execute(InputInterface $input, OutputInterface $output): void
     {
-        $output->writeln('Queues started.');
-
         foreach ($this->queues as $queue) {
             $output->writeln('Create queue ' . $queue->getName());
             $queue->declareQueue();

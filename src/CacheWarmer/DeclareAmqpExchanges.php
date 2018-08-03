@@ -14,7 +14,7 @@ class DeclareAmqpExchanges extends Command
     /**
      * @var string
      */
-    protected static $defaultName = 'amqp:declare:exchange';
+    protected static $defaultName = 'amqp:declare:exchanges';
 
     /**
      * @var Exchange[]
@@ -22,9 +22,9 @@ class DeclareAmqpExchanges extends Command
     private $exchanges;
 
     /**
-     * @param iterable $exchanges
+     * @param Exchange ...$exchanges
      */
-    public function __construct(?iterable $exchanges)
+    public function __construct(Exchange ...$exchanges)
     {
         $this->exchanges = $exchanges;
         parent::__construct();
@@ -35,13 +35,11 @@ class DeclareAmqpExchanges extends Command
      */
     public function execute(InputInterface $input, OutputInterface $output): void
     {
-        $output->writeln('Exchanges started.');
-
         foreach ($this->exchanges as $exchange) {
-            $output->writeln('Create exchange ' . $exchange->getName());
+            $output->writeln('Declare exchange ' . $exchange->getName());
             $exchange->declareExchange();
         }
 
-        $output->writeln('Exchanges finished.');
+        $output->writeln('Exchanges declared.');
     }
 }
