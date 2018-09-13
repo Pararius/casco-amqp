@@ -33,7 +33,7 @@ class HumusAmqpFactory
      *
      * @return Channel
      */
-    public static function createChannel(Connection $connection, $prefetchCount = 20): Channel
+    public static function createChannel(Connection $connection, int $prefetchCount = 20): Channel
     {
         $channel = $connection->newChannel();
         $channel->setPrefetchCount($prefetchCount);
