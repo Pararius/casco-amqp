@@ -1,0 +1,24 @@
+sudo: required
+
+branches:
+  only:
+  - master
+
+services:
+- docker
+
+language: php
+php:
+- '7.2'
+
+cache:
+  directories:
+  - "$HOME/composer/"
+
+before_script:
+- make up
+- make install
+
+script:
+- make cs-check
+- make test
