@@ -2,23 +2,16 @@ version: '3.5'
 
 services:
   rabbitmq:
-    build: ../../docker/rabbitmq
-    image: eu.gcr.io/real-estate-classifieds/casco/rabbimq:latest
+    image: rabbitmq:3.7.4-management-alpine
     environment:
       RABBITMQ_DEFAULT_USER: test
       RABBITMQ_DEFAULT_PASS: 1234
 
-  php-cli:
-    image: eu.gcr.io/real-estate-classifieds/casco/php-cli:latest
+  php:
+    build: docker/php
     environment:
       - AMQP_HOST=rabbitmq
       - AMQP_USER=test
       - AMQP_PASS=1234
     volumes:
-      - ./:/app
-
-  composer:
-    image: eu.gcr.io/real-estate-classifieds/casco/composer:latest
-    volumes:
-      - ~/.composer/cache:/composer/cache
       - ./:/app

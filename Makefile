@@ -9,18 +9,18 @@ up: ## Ensures prerequisites
 	docker-compose up -d rabbitmq
 
 install: ## Installs dependencies
-	docker-compose run --rm composer composer install --optimize-autoloader --no-interaction
+	docker-compose run --rm php composer install --optimize-autoloader --no-interaction
 .PHONY: install
 
 test: up ## Runs test suite
-	docker-compose run --rm php-cli ./vendor/bin/phpunit
+	docker-compose run --rm php ./vendor/bin/phpunit
 	docker-compose down
 .PHONY: test
 
 cs-fix: ## Fixes code standards
-	docker-compose run --rm php-cli ./vendor/bin/php-cs-fixer fix --verbose --diff
+	docker-compose run --rm php ./vendor/bin/php-cs-fixer fix --verbose --diff
 .PHONY: cs-fix
 
 cs-check: ## Checks code standards
-	docker-compose run --rm php-cli ./vendor/bin/php-cs-fixer fix -vvv --diff --dry-run
+	docker-compose run --rm php ./vendor/bin/php-cs-fixer fix -vvv --diff --dry-run
 .PHONY: cs-check
