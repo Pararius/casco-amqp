@@ -2,7 +2,7 @@ version: '3.7'
 
 services:
   test:
-    image: eu.gcr.io/real-estate-classifieds/casco/php-cli:latest
+    build: docker/php
     environment:
     - AMQP_HOST=rabbitmq
     - AMQP_USER=test
