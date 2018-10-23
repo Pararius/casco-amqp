@@ -1,0 +1,18 @@
+version: '3.7'
+
+services:
+  test:
+    image: eu.gcr.io/real-estate-classifieds/casco/php-cli:latest
+    environment:
+    - AMQP_HOST=rabbitmq
+    - AMQP_USER=test
+    - AMQP_PASS=1234
+    volumes:
+    - ./:/app:cached
+
+  phpstan:
+    image: jakzal/phpqa:alpine
+    volumes:
+    - ./:/app:cached
+    working_dir: /app
+    command: ["phpstan", "analyse", "-l1", "--no-interaction", "--no-progress", "src", "tests"]

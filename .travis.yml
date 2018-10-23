@@ -30,4 +30,5 @@ before_script:
 
 script:
 - make cs-check
+- make phpstan
 - make test
