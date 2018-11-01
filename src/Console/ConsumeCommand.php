@@ -30,6 +30,23 @@ abstract class ConsumeCommand extends Command
             return $this->consume($msg, $output);
         };
 
+        $consumer = $this->createCallbackConsumer($input, $output, $delivery);
+
+        $consumer->consume((int) $input->getOption('limit'));
+    }
+
+    /**
+     * @param InputInterface  $input
+     * @param OutputInterface $output
+     * @param                 $delivery
+     *
+     * @return CallbackConsumer
+     */
+    protected function createCallbackConsumer(InputInterface $input, OutputInterface $output, $delivery): CallbackConsumer
+    {
+        // Handle signals async (almost immediately).
+        pcntl_async_signals(true);
+
         $consumer = new CallbackConsumer(
             $this->getQueue(),
             new ConsoleLogger($output),
@@ -37,7 +54,7 @@ abstract class ConsumeCommand extends Command
             $delivery
         );
 
-        $consumer->consume((int) $input->getOption('limit'));
+        return $consumer;
     }
 
     /**
@@ -53,3 +70,4 @@ abstract class ConsumeCommand extends Command
      */
     abstract protected function getQueue(): Queue;
 }
+
