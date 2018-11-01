@@ -11,7 +11,7 @@ services:
     - ./:/app:cached
 
   phpstan:
-    image: jakzal/phpqa:alpine
+    build: docker/phpqa
     volumes:
     - ./:/app:cached
     working_dir: /app
