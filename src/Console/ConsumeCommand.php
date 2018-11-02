@@ -70,4 +70,3 @@ abstract class ConsumeCommand extends Command
      */
     abstract protected function getQueue(): Queue;
 }
-
