@@ -26,23 +26,31 @@ abstract class ConsumeCommand extends Command
     /** @inheritdoc */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        $delivery = function (Envelope $msg) use ($output): DeliveryResult {
-            return $this->consume($msg, $output);
-        };
+        $consumer = $this->createCallbackConsumer(
+            $output,
+            (int) $input->getOption('timeout'),
+            function (Envelope $msg) use ($output): DeliveryResult {
+                return $this->consume($msg, $output);
+            }
+        );
 
-        $consumer = $this->createCallbackConsumer($input, $output, $delivery);
+        $output->writeln(
+            sprintf('Consuming from queue "<comment>%s</comment>"', $this->getQueue()->getName())
+        );
 
-        $consumer->consume((int) $input->getOption('limit'));
+        $consumer->consume(
+            (int) $input->getOption('limit')
+        );
     }
 
     /**
-     * @param InputInterface  $input
+     * @param int             $timeout
      * @param OutputInterface $output
-     * @param                 $delivery
+     * @param callable        $delivery
      *
      * @return CallbackConsumer
      */
-    protected function createCallbackConsumer(InputInterface $input, OutputInterface $output, $delivery): CallbackConsumer
+    protected function createCallbackConsumer(OutputInterface $output, int $timeout, callable $delivery): CallbackConsumer
     {
         // Handle signals async (almost immediately).
         pcntl_async_signals(true);
@@ -50,7 +58,7 @@ abstract class ConsumeCommand extends Command
         $consumer = new CallbackConsumer(
             $this->getQueue(),
             new ConsoleLogger($output),
-            (int) $input->getOption('timeout'),
+            $timeout,
             $delivery
         );
 
