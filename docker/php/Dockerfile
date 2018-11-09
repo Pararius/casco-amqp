@@ -17,6 +17,7 @@ RUN apk add --virtual .build-dependencies --no-cache \
     && apk del .build-dependencies
 
 RUN docker-php-ext-install \
+    pcntl \
     zip
 
 RUN curl -sS -o /tmp/composer-setup.php https://getcomposer.org/installer \
