@@ -1,7 +1,6 @@
 {
   "name": "casco/amqp",
   "type": "library",
-  "version": "1.0.4",
   "config": {
     "sort-packages": true
   },
