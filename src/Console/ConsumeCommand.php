@@ -62,6 +62,15 @@ abstract class ConsumeCommand extends Command
             $delivery
         );
 
+        $shutdownWrapper = function () use ($consumer) {
+            $this->shutdown();
+            $consumer->shutdown();
+        };
+
+        pcntl_signal(SIGTERM, $shutdownWrapper);
+        pcntl_signal(SIGINT, $shutdownWrapper);
+        pcntl_signal(SIGHUP, $shutdownWrapper);
+
         return $consumer;
     }
 
@@ -77,4 +86,9 @@ abstract class ConsumeCommand extends Command
      * @return Queue
      */
     abstract protected function getQueue(): Queue;
+
+    public function shutdown(): void
+    {
+        // noop
+    }
 }
