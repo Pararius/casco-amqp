@@ -8,7 +8,7 @@ use Humus\Amqp\Channel;
 use Humus\Amqp\Connection;
 use Humus\Amqp\ConnectionOptions;
 use Humus\Amqp\Constants;
-use Humus\Amqp\Driver\AmqpExtension\Connection as AmqpExtensionConnection;
+use Humus\Amqp\Driver\PhpAmqpLib\LazySocketConnection as AmqpConnection;
 use Humus\Amqp\Exchange;
 use Humus\Amqp\Queue;
 
@@ -21,10 +21,7 @@ class HumusAmqpFactory
      */
     public static function createConnection(ConnectionOptions $options): Connection
     {
-        $connection = new AmqpExtensionConnection($options);
-        $connection->connect();
-
-        return $connection;
+        return new AmqpConnection($options);
     }
 
     /**

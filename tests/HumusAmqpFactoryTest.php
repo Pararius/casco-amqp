@@ -25,6 +25,7 @@ class HumusAmqpFactoryTest extends TestCase
         $options->setPassword(getenv('AMQP_PASS'));
 
         $connection = HumusAmqpFactory::createConnection($options);
+        $connection->newChannel();
 
         $this->assertTrue(
             $connection->isConnected()
@@ -45,10 +46,6 @@ class HumusAmqpFactoryTest extends TestCase
     {
         $prefetchCount = 10;
         $channel = HumusAmqpFactory::createChannel($connection, $prefetchCount);
-
-        $this->assertTrue(
-            $channel->isConnected()
-        );
 
         $this->assertSame(
             $prefetchCount,

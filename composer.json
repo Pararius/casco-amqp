@@ -5,8 +5,8 @@
     "sort-packages": true
   },
   "require": {
-    "ext-amqp": "^1.9",
     "ext-pcntl": "^7.2",
+    "php-amqplib/php-amqplib": "^2.8",
     "prolic/humus-amqp": "^1.4",
     "symfony/console": "^4.1",
     "symfony/http-kernel": "^4.1"
