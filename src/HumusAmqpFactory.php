@@ -8,7 +8,7 @@ use Humus\Amqp\Channel;
 use Humus\Amqp\Connection;
 use Humus\Amqp\ConnectionOptions;
 use Humus\Amqp\Constants;
-use Humus\Amqp\Driver\PhpAmqpLib\LazySocketConnection as AmqpConnection;
+use Humus\Amqp\Driver\PhpAmqpLib\LazyConnection as AmqpConnection;
 use Humus\Amqp\Exchange;
 use Humus\Amqp\Queue;
 
