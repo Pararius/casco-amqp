@@ -1,6 +1,8 @@
 {
   "name": "casco/amqp",
+  "license": "proprietary",
   "type": "library",
+  "description": "Library for easy integration with humus/amqp",
   "config": {
     "sort-packages": true
   },
