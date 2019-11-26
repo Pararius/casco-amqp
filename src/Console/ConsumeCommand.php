@@ -24,7 +24,7 @@ abstract class ConsumeCommand extends Command
     }
 
     /** @inheritdoc */
-    protected function execute(InputInterface $input, OutputInterface $output)
+    protected function execute(InputInterface $input, OutputInterface $output): int
     {
         $consumer = $this->createCallbackConsumer(
             $output,
@@ -41,15 +41,10 @@ abstract class ConsumeCommand extends Command
         $consumer->consume(
             (int) $input->getOption('limit')
         );
+
+        return 0;
     }
 
-    /**
-     * @param int             $timeout
-     * @param OutputInterface $output
-     * @param callable        $delivery
-     *
-     * @return CallbackConsumer
-     */
     protected function createCallbackConsumer(OutputInterface $output, int $timeout, callable $delivery): CallbackConsumer
     {
         // Handle signals async (almost immediately).
@@ -74,17 +69,8 @@ abstract class ConsumeCommand extends Command
         return $consumer;
     }
 
-    /**
-     * @param Envelope        $envelope
-     * @param OutputInterface $output
-     *
-     * @return DeliveryResult
-     */
     abstract protected function consume(Envelope $envelope, OutputInterface $output): DeliveryResult;
 
-    /**
-     * @return Queue
-     */
     abstract protected function getQueue(): Queue;
 
     public function shutdown(): void

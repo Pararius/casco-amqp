@@ -14,22 +14,11 @@ use Humus\Amqp\Queue;
 
 class HumusAmqpFactory
 {
-    /**
-     * @param ConnectionOptions $options
-     *
-     * @return Connection
-     */
     public static function createConnection(ConnectionOptions $options): Connection
     {
         return new AmqpConnection($options);
     }
 
-    /**
-     * @param Connection $connection
-     * @param int        $prefetchCount
-     *
-     * @return Channel
-     */
     public static function createChannel(Connection $connection, int $prefetchCount = 20): Channel
     {
         $channel = $connection->newChannel();
@@ -38,15 +27,6 @@ class HumusAmqpFactory
         return $channel;
     }
 
-    /**
-     * @param Channel $channel
-     * @param string  $name
-     * @param string  $type
-     * @param int     $flags
-     * @param array   $args
-     *
-     * @return Exchange
-     */
     public static function createExchange(
         Channel $channel,
         string $name,
@@ -64,14 +44,6 @@ class HumusAmqpFactory
         return $exchange;
     }
 
-    /**
-     * @param Channel $channel
-     * @param string  $name
-     * @param string  $type
-     * @param int     $flags
-     *
-     * @return Exchange
-     */
     public static function createDelayedExchange(
         Channel $channel,
         string $name,
@@ -89,13 +61,6 @@ class HumusAmqpFactory
         );
     }
 
-    /**
-     * @param Channel $channel
-     * @param string  $name
-     * @param int     $flags
-     *
-     * @return Queue
-     */
     public static function createQueue(
         Channel $channel,
         string $name,
