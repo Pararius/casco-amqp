@@ -1,6 +1,8 @@
 {
   "name": "casco/amqp",
+  "license": "proprietary",
   "type": "library",
+  "description": "Library for easy integration with humus/amqp",
   "config": {
     "sort-packages": true
   },
@@ -8,8 +10,8 @@
     "ext-pcntl": "^7.2",
     "php-amqplib/php-amqplib": "^2.8",
     "prolic/humus-amqp": "^1.4",
-    "symfony/console": "^4.3",
-    "symfony/http-kernel": "^4.3"
+    "symfony/console": "^4.3 || ^5.0",
+    "symfony/http-kernel": "^4.3 || ^5.0"
   },
   "require-dev": {
     "phpunit/phpunit": "^8.0",
