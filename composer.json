@@ -8,8 +8,8 @@
     "ext-pcntl": "^7.2",
     "php-amqplib/php-amqplib": "^2.8",
     "prolic/humus-amqp": "^1.4",
-    "symfony/console": "^4.1 || ^5.0",
-    "symfony/http-kernel": "^4.1"
+    "symfony/console": "^4.3 || ^5.0",
+    "symfony/http-kernel": "^4.3 || ^5.0"
   },
   "require-dev": {
     "phpunit/phpunit": "^8.0",

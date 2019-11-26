@@ -37,10 +37,6 @@ class HumusAmqpFactoryTest extends TestCase
     /**
      * @test
      * @depends it_can_create_a_connection
-     *
-     * @param Connection $connection
-     *
-     * @return Channel
      */
     public function it_can_create_a_channel(Connection $connection): Channel
     {
@@ -58,10 +54,6 @@ class HumusAmqpFactoryTest extends TestCase
     /**
      * @test
      * @depends it_can_create_a_channel
-     *
-     * @param Channel $channel
-     *
-     * @return Exchange
      */
     public function it_can_create_an_exchange(Channel $channel): Exchange
     {
@@ -86,8 +78,6 @@ class HumusAmqpFactoryTest extends TestCase
     /**
      * @test
      * @depends it_can_create_a_channel
-     *
-     * @param Channel $channel
      */
     public function it_creates_an_exchange_with_defaults(Channel $channel): void
     {
@@ -103,8 +93,6 @@ class HumusAmqpFactoryTest extends TestCase
     /**
      * @test
      * @depends it_can_create_a_channel
-     *
-     * @param Channel $channel
      */
     public function it_can_create_a_queue(Channel $channel): void
     {
@@ -124,8 +112,6 @@ class HumusAmqpFactoryTest extends TestCase
     /**
      * @test
      * @depends it_can_create_a_channel
-     *
-     * @param Channel $channel
      */
     public function it_creates_a_queue_with_defaults(Channel $channel): void
     {
@@ -137,9 +123,6 @@ class HumusAmqpFactoryTest extends TestCase
         $this->assertSame(Constants::AMQP_DURABLE, $queue->getFlags());
     }
 
-    /**
-     * @return string
-     */
     private function generateName(): string
     {
         return uniqid('amqp', true);
